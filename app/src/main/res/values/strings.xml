@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Radio UAS</string>
+    <string name="your_name">Tu nombre...</string>
+    <string name="your_message">Tu mensaje...</string>
+    <string name="button_send">ENVIAR</string>
+    <string name="leave_comment">Envía un saludo o deja un comentario</string>
+
+</resources>

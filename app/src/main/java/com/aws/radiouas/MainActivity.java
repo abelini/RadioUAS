@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
+        this.getSupportActionBar().hide();
         this.setContentView(R.layout.activity_main);
 
         this.programName = (TextView) findViewById(R.id.programName);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Thread getCurrentProgramThread = new Thread(new CurrentProgram(response), "CurrentProgram");
 
-        // JW Player
+        // Set JWPlayer
         JWPlayerFragment fragment = (JWPlayerFragment) getFragmentManager().findFragmentById(R.id.appPlayer);
         fragment.setFullscreenOnDeviceRotate(false);
         JWPlayerView playerView = fragment.getPlayer();
@@ -69,15 +69,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendMessage(View view) {
-        //Intent intent = new Intent(this, DisplayMessageActivity.class);
         userName = (EditText) findViewById(R.id.userName);
         userMessage = (EditText) findViewById(R.id.userMessage);
-
-        String name = userName.getText().toString();
-        String message = userMessage.getText().toString();
-
-        /* Send HTTP POST Request */
-        this.sendMessageToServer(name, message);
+        this.sendMessageToServer(userName.getText().toString(), userMessage.getText().toString());
     }
 
     private void sendMessageToServer(final String n, final String m){
@@ -134,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         networkThread.start();
         try {
             networkThread.join();
+
         } catch(InterruptedException e){
             this.serverResponse.setText(e.getMessage());
         }
@@ -173,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         networkThread.start();
         try {
             networkThread.join();
+
         } catch(InterruptedException e){
             this.programName.setText(e.getMessage());
         }

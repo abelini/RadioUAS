@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // JW Player
         JWPlayerFragment fragment = (JWPlayerFragment) getFragmentManager().findFragmentById(R.id.appPlayer);
-        fragment.setFullscreenOnDeviceRotate(false);
+        //fragment.setFullscreenOnDeviceRotate(false);
         JWPlayerView playerView = fragment.getPlayer();
         PlaylistItem video = new PlaylistItem(videoURL);
         playerView.load(video);
@@ -179,4 +179,42 @@ public class MainActivity extends AppCompatActivity {
         this.programName.setText(this.program);
     }
 
+    /**
+     *  TO DO
+     *
+     *  hACER una clase que extienda JWPlayerFragment para overridear estos metodos:
+     *
+
+
+    /*
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // Set fullscreen when the device is rotated to landscape
+        JWPlayerView.setFullscreen(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE, true);
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Exit fullscreen when the user pressed the Back button
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (JWPlayerView.getFullscreen()) {
+                JWPlayerView.setFullscreen(false);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onFullscreen(boolean state) {
+        if (state) {
+            getActionBar().hide();
+            findViewById(R.id.custom_ui).setVisibility(View.VISIBLE);
+        } else {
+            getActionBar().show();
+        }
+        ((CoordinatorLayout)findViewById({R.layout.activity_main})).setFitsSystemWindows(!state);
+    }
+    */
 }

@@ -5,14 +5,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.longtailvideo.jwplayer.JWPlayerFragment;
 import com.longtailvideo.jwplayer.JWPlayerView;
+import com.longtailvideo.jwplayer.configuration.Skin;
 import com.longtailvideo.jwplayer.media.playlists.PlaylistItem;
 
 import java.io.BufferedInputStream;
@@ -24,7 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity /*implements KeyEvent.Callback*/ {
 
     private String program = "Radio UAS 96.1FM";
 
@@ -44,12 +45,16 @@ public class MainActivity extends AppCompatActivity {
 
     private final String messagesURL = "http://www.radiouas.org/messages/inbox.php";
 
+    //private final String skinURL = "http://radiouas.org/resources/RadioUASTVSkin.css";
+
     //public static String response;
+
+    private JWPlayerView playerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.getSupportActionBar().hide();
         this.setContentView(R.layout.activity_main);
@@ -63,9 +68,21 @@ public class MainActivity extends AppCompatActivity {
         // Set JWPlayer
         JWPlayerFragment fragment = (JWPlayerFragment) getFragmentManager().findFragmentById(R.id.appPlayer);
         fragment.setFullscreenOnDeviceRotate(false);
-        JWPlayerView playerView = fragment.getPlayer();
+        this.playerView = fragment.getPlayer();
+        //playerView.setFullscreen(false, false);
+        this.playerView.setSkin(Skin.VAPOR);
         PlaylistItem video = new PlaylistItem(videoURL);
-        playerView.load(video);
+        this.playerView.load(video);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (this.playerView.getFullscreen()) {
+                this.playerView.setFullscreen(false, false);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public void sendMessage(View view) {

@@ -5,14 +5,21 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.longtailvideo.jwplayer.JWPlayerFragment;
 import com.longtailvideo.jwplayer.JWPlayerView;
+import com.longtailvideo.jwplayer.events.listeners.VideoPlayerEvents;
+import com.longtailvideo.jwplayer.fullscreen.DefaultFullscreenHandler;
+import com.longtailvideo.jwplayer.fullscreen.FullscreenHandler;
+import com.longtailvideo.jwplayer.fullscreen.MaximizingFullscreenHandler;
 import com.longtailvideo.jwplayer.media.playlists.PlaylistItem;
 
 import java.io.BufferedInputStream;
@@ -58,13 +65,39 @@ public class MainActivity extends AppCompatActivity {
         this.serverResponse = (TextView) findViewById(R.id.serverMessage);
         this.getProgram();
 
-        //Thread getCurrentProgramThread = new Thread(new CurrentProgram(response), "CurrentProgram");
+
+
+        LinearLayout PlayerContainerLayout = (LinearLayout)findViewById(R.id.PlayerContainer);
+        ViewGroup.LayoutParams params = PlayerContainerLayout.getLayoutParams();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        params.height = metrics.widthPixels / 16 * 9;
+        PlayerContainerLayout.setLayoutParams(params);
+
 
         // JW Player
         JWPlayerFragment fragment = (JWPlayerFragment) getFragmentManager().findFragmentById(R.id.appPlayer);
-        //fragment.setFullscreenOnDeviceRotate(false);
+        fragment.setFullscreenOnDeviceRotate(false);
         JWPlayerView playerView = fragment.getPlayer();
         PlaylistItem video = new PlaylistItem(videoURL);
+        playerView.setFullscreen(false, false);
+        //playerView.setSkin("http://www.radiouas.org/resources/RadioUASTVSkin.css");
+
+
+        // a ver si con esto puedo manejar el fullscreen
+        DefaultFullscreenHandler fullscreenHandler = new DefaultFullscreenHandler(this, playerView){
+            @Override
+            public void onFullscreenRequested(){
+                // hay que calcular el alto de la pantalla en modo landscape y asignarlo a LinearLayout#PlayerContainer
+            }
+            @Override
+            public void onFullscreenExitRequested(){
+                // hay que regresar a LinearLayout#PlayerContainer el valor original
+            }
+        };
+
+
+
         playerView.load(video);
     }
 
@@ -178,43 +211,4 @@ public class MainActivity extends AppCompatActivity {
         }
         this.programName.setText(this.program);
     }
-
-    /**
-     *  TO DO
-     *
-     *  hACER una clase que extienda JWPlayerFragment para overridear estos metodos:
-     *
-
-
-    /*
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        // Set fullscreen when the device is rotated to landscape
-        JWPlayerView.setFullscreen(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE, true);
-        super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Exit fullscreen when the user pressed the Back button
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (JWPlayerView.getFullscreen()) {
-                JWPlayerView.setFullscreen(false);
-                return false;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onFullscreen(boolean state) {
-        if (state) {
-            getActionBar().hide();
-            findViewById(R.id.custom_ui).setVisibility(View.VISIBLE);
-        } else {
-            getActionBar().show();
-        }
-        ((CoordinatorLayout)findViewById({R.layout.activity_main})).setFitsSystemWindows(!state);
-    }
-    */
 }

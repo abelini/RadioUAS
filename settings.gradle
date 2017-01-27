@@ -1,1 +1,1 @@
-include ':app', ':jwplayer-android-sdk-2.5.3+164', ':volley'
+include ':app', ':jwplayer-android-sdk-2.5.3+164'
